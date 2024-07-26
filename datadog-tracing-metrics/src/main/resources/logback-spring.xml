@@ -1,11 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - traceId: %X{dd.trace_id} spanId: %X{dd.span_id} - %m%n"/>
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+    <springProperty name="includeCallerData" source="include.caller.data"/>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>${LOG_PATTERN}</pattern>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <includeCallerData>${includeCallerData:-false}</includeCallerData>
+            <providers>
+                <timestamp>
+                    <fieldName>_time</fieldName>
+                    <pattern>dd/MM/yyyy HH:mm:ss.SSS</pattern>
+                </timestamp>
+                <message>
+                    <fieldName>message</fieldName>
+                </message>
+                <arguments/>
+                <logstashMarkers/>
+                <keyValuePairs/>
+<!--                <mdc>-->
+<!--                    <mdcKeyFieldName>dd.service=datadogService</mdcKeyFieldName>-->
+<!--                    <mdcKeyFieldName>dd.env=datadogEnv</mdcKeyFieldName>-->
+<!--                    <mdcKeyFieldName>dd.span_id=datadogSpanId</mdcKeyFieldName>-->
+<!--                    <mdcKeyFieldName>dd.trace_id=datadogTraceId</mdcKeyFieldName>-->
+<!--                </mdc>-->
+                <nestedField>
+                    <fieldName>log_origin</fieldName>
+                    <providers>
+                        <callerData>
+                            <classFieldName>class</classFieldName>
+                            <methodFieldName>method</methodFieldName>
+                            <fileFieldName>file</fileFieldName>
+                            <lineFieldName>line</lineFieldName>
+                        </callerData>
+                    </providers>
+                </nestedField>
+                <nestedField>
+                    <fieldName>error</fieldName>
+                    <providers>
+                        <throwableClassName>
+                            <fieldName>class</fieldName>
+                        </throwableClassName>
+                        <throwableMessage>
+                            <fieldName>message</fieldName>
+                        </throwableMessage>
+                        <stackTrace>
+                            <fieldName>stackTrace</fieldName>
+                        </stackTrace>
+                        <rootStackTraceElement>
+                            <fieldName>rootStackTrace</fieldName>
+                            <classFieldName>class</classFieldName>
+                            <methodFieldName>method</methodFieldName>
+                        </rootStackTraceElement>
+                        <throwableRootCauseClassName>
+                            <fieldName>root_cause_class</fieldName>
+                        </throwableRootCauseClassName>
+                        <throwableRootCauseMessage>
+                            <fieldName>root_cause_message</fieldName>
+                        </throwableRootCauseMessage>
+                    </providers>
+                </nestedField>
+                <logLevel/>
+                <loggerName>
+                    <fieldName>logger_name</fieldName>
+                </loggerName>
+                <threadName/>
+                <tags/>
+            </providers>
         </encoder>
     </appender>
-    <root level="INFO">
+
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <includeCallerData>${includeCallerData:-false}</includeCallerData>
         <appender-ref ref="CONSOLE"/>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="ASYNC"/>
     </root>
 </configuration>

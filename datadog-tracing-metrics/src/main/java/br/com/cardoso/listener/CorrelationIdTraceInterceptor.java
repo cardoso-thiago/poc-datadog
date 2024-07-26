@@ -16,6 +16,7 @@ public class CorrelationIdTraceInterceptor implements TraceInterceptor {
 
     @Override
     public int priority() {
-        return 0;
+        // some high unique number so this interceptor is last
+        return 100;
     }
 }

@@ -1,0 +1,27 @@
+  version: '3.8'
+
+  services:
+    app:
+      image: datadog-tracing-metrics:0.0.1
+      container_name: datadog-tracing-metrics
+      ports:
+        - "8080:8080"
+      environment:
+        - DATADOG_API_KEY=${DD_API_KEY}
+        - DD_AGENT_HOST=datadog-agent
+    datadog-agent:
+      image: datadog/agent:latest
+      container_name: dd-agent
+      ports:
+        - "8126:8126"
+      environment:
+        - DD_API_KEY=${DD_API_KEY}
+        - DD_LOGS_ENABLED=true
+        - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+        - DD_CONTAINER_EXCLUDE_LOGS=image:datadog/agent:*
+        - DD_SITE=us5.datadoghq.com
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+        - /proc/:/host/proc/:ro
+        - /opt/datadog-agent/run:/opt/datadog-agent/run:rw
+        - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro

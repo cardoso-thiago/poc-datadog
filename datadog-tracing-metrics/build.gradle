@@ -20,8 +20,10 @@ repositories {
 dependencies {
 	runtimeOnly 'io.micrometer:micrometer-registry-datadog'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-//	implementation 'io.opentelemetry.instrumentation:opente	lemetry-instrumentation-annotations:2.5.0'
 	implementation 'com.datadoghq:dd-trace-api:1.37.0'
+
+	implementation 'org.springframework.boot:spring-boot-starter-logging'
+	implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
