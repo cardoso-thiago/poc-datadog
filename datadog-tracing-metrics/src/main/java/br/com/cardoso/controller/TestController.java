@@ -1,5 +1,6 @@
 package br.com.cardoso.controller;
 
+import datadog.trace.api.CorrelationIdentifier;
 import datadog.trace.api.Trace;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.slf4j.Logger;
@@ -21,7 +22,8 @@ public class TestController {
     @GetMapping("/test")
     @Trace(operationName = "testeTagCustomizadaDD", resourceName = "TestController.test")
     public ResponseEntity<String> test() {
-        LOGGER.info("Logando para visualização do traceID e SpanID.");
+        String traceId = CorrelationIdentifier.getTraceId();
+        LOGGER.info("Logando para visualização do traceID e SpanID. TraceId via API: {}", traceId);
         meterRegistry.counter("custom.metric.counter").increment();
         return ResponseEntity.ok("OK");
     }

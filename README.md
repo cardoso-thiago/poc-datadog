@@ -26,3 +26,11 @@ implementation 'io.opentelemetry.instrumentation:opentelemetry-instrumentation-a
 ```groovy
 implementation 'com.datadoghq:dd-trace-api:1.37.0'
 ```
+
+## Considerações
+
+- Alterar o nome do campo do `dd.trace_id` no MDC faz a correlação se perder na plataforma em todos os casos
+- Em relação à configuração `-Ddd.trace.128.bit.traceid.logging.enabled=true` tanto a informação injetada no log pelo agent como a chamada para o `CorrelationIdentifier.getTraceId()` retornam a informação no formato OTEL que corresponde ao exibido na plataforma.
+  - Issue relacionada para Python: https://github.com/DataDog/dd-trace-py/issues/7883
+- Mudar as configurações via SystemProperty para alterar o comportamento do agent não surtem efeito. Existe uma maneira de fazer isso em tempo de execução?
+- A configuração `-Ddd.logs.injection=true` de fato é necessária para injeção das informações de traceId e spanId no log
