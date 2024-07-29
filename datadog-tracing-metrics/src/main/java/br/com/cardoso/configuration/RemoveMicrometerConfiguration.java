@@ -11,6 +11,9 @@ public class RemoveMicrometerConfiguration {
 
     @Bean
     public MeterRegistryCustomizer<MeterRegistry> metricsRegistryConfig() {
-        return registry -> registry.config().meterFilter(MeterFilter.deny(id -> !id.getName().startsWith("custom.metric")));
+        return registry -> registry.config()
+                .commonTags("service", "datadog-tracing-metrics")
+                .commonTags("application", "datadog-tracing-metrics")
+                .meterFilter(MeterFilter.deny(id -> !id.getName().startsWith("custom.metric")));
     }
 }

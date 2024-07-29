@@ -17,6 +17,7 @@
                 <arguments/>
                 <logstashMarkers/>
                 <keyValuePairs/>
+                <mdc/>
 <!--                <mdc>-->
 <!--                    <mdcKeyFieldName>dd.service=datadogService</mdcKeyFieldName>-->
 <!--                    <mdcKeyFieldName>dd.env=datadogEnv</mdcKeyFieldName>-->

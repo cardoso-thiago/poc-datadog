@@ -24,7 +24,7 @@ public class TestController {
     public ResponseEntity<String> test() {
         String traceId = CorrelationIdentifier.getTraceId();
         LOGGER.info("Logando para visualização do traceID e SpanID. TraceId via API: {}", traceId);
-        meterRegistry.counter("custom.metric.counter").increment();
+        meterRegistry.counter("custom.metric.counter3").increment();
         return ResponseEntity.ok("OK");
     }
 }

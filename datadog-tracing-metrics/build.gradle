@@ -18,7 +18,8 @@ repositories {
 }
 
 dependencies {
-	runtimeOnly 'io.micrometer:micrometer-registry-datadog'
+//	runtimeOnly 'io.micrometer:micrometer-registry-datadog'
+	runtimeOnly 'io.micrometer:micrometer-registry-statsd'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'com.datadoghq:dd-trace-api:1.37.0'
 
